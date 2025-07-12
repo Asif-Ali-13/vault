@@ -33,6 +33,7 @@ interface IWallet {
 	path: string;
 }
 
+
 export const WalletGenerator = () => {
 
 	const [path, setPath] = useState<string>("");
