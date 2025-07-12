@@ -53,22 +53,22 @@ export const WalletGenerator = () => {
 
 	useEffect(() => {
 		const storedWallets = localStorage.getItem("wallets");
-    const storedMnemonic = localStorage.getItem("mnemonics");
-    const storedPathTypes = localStorage.getItem("paths");
+        const storedMnemonic = localStorage.getItem("mnemonics");
+        const storedPathTypes = localStorage.getItem("paths");
 
 		if (storedWallets && storedMnemonic && storedPathTypes) {
-      setMnemonicWords(JSON.parse(storedMnemonic));
-      setWallets(JSON.parse(storedWallets));
-      setPathTypes(JSON.parse(storedPathTypes));
-      setVisiblePrivateKeys(JSON.parse(storedWallets).map(() => false));
-      setVisiblePhrases(JSON.parse(storedWallets).map(() => false));
-    }
+        setMnemonicWords(JSON.parse(storedMnemonic));
+        setWallets(JSON.parse(storedWallets));
+        setPathTypes(JSON.parse(storedPathTypes));
+        setVisiblePrivateKeys(JSON.parse(storedWallets).map(() => false));
+        setVisiblePhrases(JSON.parse(storedWallets).map(() => false));
+        }
 	}, []);
 
 	const generateWalletFromMnemonic = (
 		pathType: string,
-    mnemonic: string,
-    accountIndex: number
+        mnemonic: string,
+        accountIndex: number
 	): IWallet | null => {
 		
 		try{
@@ -77,7 +77,7 @@ export const WalletGenerator = () => {
 			const { key: derivedSeed } = derivePath(path, seedBuffer.toString("hex"));
 
 			let publicKeyEncoded: string;
-      let privateKeyEncoded: string;
+            let privateKeyEncoded: string;
 
 			if(pathType == "501"){
 				// solana
@@ -97,7 +97,7 @@ export const WalletGenerator = () => {
 
 			}else {
 				toast.error("Unsupported path type.");
-        return null;
+                return null;
 			}
 
 			return {
@@ -109,7 +109,7 @@ export const WalletGenerator = () => {
 		}catch(error){
 			toast.error("Failed to generate wallet. Please try again.");
 			console.log(error);
-      return null;
+            return null;
 		}
 	}
 
@@ -152,45 +152,44 @@ export const WalletGenerator = () => {
 	
 	const handleAddWallet = () => {
 		if (!mnemonicWords) {
-      toast.error("No mnemonic found. Please generate a wallet first.");
-      return;
+        toast.error("No mnemonic found. Please generate a wallet first.");
+        return;
     }
 
 		const wallet = generateWalletFromMnemonic(
-      path,
-      mnemonicWords.join(" "),
-      wallets.length
-    );
+            path,
+            mnemonicWords.join(" "),
+            wallets.length
+        );
 
 		if(wallet){
 			const updatedWallets = [...wallets, wallet];
-      const updatedPathType = [pathTypes, pathTypes];	// keep an eye on this
-      setWallets(updatedWallets);
+            const updatedPathType = [pathTypes, pathTypes];	// keep an eye on this
+            setWallets(updatedWallets);
 
 			localStorage.setItem("wallets", JSON.stringify(updatedWallets));
-      localStorage.setItem("pathTypes", JSON.stringify(updatedPathType));
+            localStorage.setItem("pathTypes", JSON.stringify(updatedPathType));
 
 			setVisiblePrivateKeys([...visiblePrivateKeys, false]);
-      setVisiblePhrases([...visiblePhrases, false]);
+            setVisiblePhrases([...visiblePhrases, false]);
 
-      toast.success("Wallet generated successfully!");
+            toast.success("Wallet generated successfully!");
 		}
 	}
 
 	const handleClearWallets = () => {
 		localStorage.removeItem("wallets");
-    localStorage.removeItem("mnemonics");
-		// this is the point where all wallets get deleted and 
-		// paths should be removed from the local storage
-    localStorage.removeItem("paths");		// eye
+        localStorage.removeItem("mnemonics");
+        localStorage.removeItem("paths");		
+        localStorage.removeItem("path");
 
 		setWallets([]);
-    setMnemonicWords([]);
-    setPathTypes([]);
-    setVisiblePrivateKeys([]);
-    setVisiblePhrases([]);
+        setMnemonicWords([]);
+        setPathTypes([]);
+        setVisiblePrivateKeys([]);
+        setVisiblePhrases([]);
 
-    toast.success("All wallets cleared.");
+        toast.success("All wallets cleared.");
 	}
 	
 	const handleDeleteWallet = (index: number) => {
@@ -198,15 +197,15 @@ export const WalletGenerator = () => {
 		const updatedPathTypes = pathTypes.filter((_, i) => i !== index);
 
 		setWallets(updatedWallets);
-    setPathTypes(updatedPathTypes);
+        setPathTypes(updatedPathTypes);
 
 		localStorage.setItem("wallets", JSON.stringify(updatedWallets));
-    localStorage.setItem("paths", JSON.stringify(updatedPathTypes));	// eye
+        localStorage.setItem("paths", JSON.stringify(updatedPathTypes));	// eye
 
 		setVisiblePrivateKeys(visiblePrivateKeys.filter((_, i) => i !== index));
-    setVisiblePhrases(visiblePhrases.filter((_, i) => i !== index));
+        setVisiblePhrases(visiblePhrases.filter((_, i) => i !== index));
 
-    toast.success("Wallet deleted successfully!");
+        toast.success("Wallet deleted successfully!");
 	}
 
 	const copyToClipboard = (content: string) => {
@@ -239,19 +238,19 @@ export const WalletGenerator = () => {
 							<motion.div
 								className="flex gap-4 flex-col my-12"
 								initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.3,
-                  ease: "easeInOut",
-                }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                duration: 0.3,
+                                ease: "easeInOut",
+                                }}
 							>
 								<div className="flex flex-col gap-2">
 									<h1 className="tracking-tighter text-4xl md:text-5xl font-black">
-                    Vault supports multiple blockchains
-                  </h1>
+                                        Vault supports multiple blockchains
+                                    </h1>
 									<p className="text-primary/80 font-semibold text-lg md:text-xl">
-                    Choose a blockchain to get started.
-                  </p>
+                                        Choose a blockchain to get started.
+                                    </p>
 								</div>
 								<div className="flex gap-2 pt-2">
 									<Button
@@ -260,8 +259,8 @@ export const WalletGenerator = () => {
 											setPath("501");
 											setPathTypes(["501"]);
 											toast.success(
-                        "Wallet selected. Please generate a wallet to continue."
-                      );
+                                                "Wallet selected. Please generate a wallet to continue."
+                                            );
 										}}
 									>
 										<Image src="/solana-sol-logo.svg" alt="sol icon" width={20} height={20}/>
@@ -273,8 +272,8 @@ export const WalletGenerator = () => {
 											setPath("60");
 											setPathTypes(["60"]);
 											toast.success(
-                        "Wallet selected. Please generate a wallet to continue."
-                      );
+                                                "Wallet selected. Please generate a wallet to continue."
+                                            );
 										}}
 									>
 										<Image src="/ethereum-eth-logo.svg" alt="eth icon" width={15} height={15}/>
@@ -342,7 +341,7 @@ export const WalletGenerator = () => {
 							<Button
 								onClick={() => setShowMnemonic(!showMnemonic)}
 								variant="ghost"
-            	>
+            	            >
 								{showMnemonic ? (
 									<ChevronUp className="size-4" />
 								) : (
@@ -361,7 +360,7 @@ export const WalletGenerator = () => {
 										ease: "easeInOut",
 									}}
 									className="flex flex-col w-full items-center justify-center"
-              		onClick={() => copyToClipboard(mnemonicWords.join(" "))}
+              		                onClick={() => copyToClipboard(mnemonicWords.join(" "))}
 								>
 									<motion.div
 										initial={{ opacity: 0, y: -20 }}
@@ -452,7 +451,7 @@ export const WalletGenerator = () => {
 							className={`grid gap-6 grid-cols-1 col-span-1  ${
 								gridView ? "md:grid-cols-2 lg:grid-cols-3" : ""
 							}`}
-          	>
+          	            >
 							{
 								wallets.map((wallet: any, index: number) => (
 									<motion.div
