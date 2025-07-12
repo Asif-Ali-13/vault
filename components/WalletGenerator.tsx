@@ -456,7 +456,7 @@ export const WalletGenerator = () => {
 							}`}
           	            >
 							{
-								wallets.map((wallet: any, index: number) => (
+								wallets.map((wallet: IWallet, index: number) => (
 									<motion.div
 										key={index}
 										initial={{ opacity: 0, y: -20 }}
